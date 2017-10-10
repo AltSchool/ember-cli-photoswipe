@@ -46,6 +46,9 @@ export default Em.Component.extend({
   },
 
   _initItemGallery: function() {
+    const items = this.get('items');
+    console.log('ECLI-PHOTOSWIPE: _initItemGallery new PhotoSwipe', items && items.length);
+
     this.set('gallery', new PhotoSwipe(
       this.get('pswpEl'),
       this.get('pswpTheme'),
@@ -58,12 +61,20 @@ export default Em.Component.extend({
     this._reInitOnClose();
   },
 
+  shouldReinitOnClose: true, // preserve current behavior by default
+
   _reInitOnClose: function() {
     var component = this;
+    const shouldReinitOnClose = this.get('shouldReinitOnClose');
+
     this.get('gallery').listen('close', function() {
-      run.next(function() {
-        component._initItemGallery();
-      });
+      if (shouldReinitOnClose) {
+        run.next(function() {
+          component._initItemGallery();
+        });
+      } else {
+        console.log('ECLI-PHOTOSWIPE: not re-initing on close');
+      }
     });
   },
 
@@ -95,6 +106,8 @@ export default Em.Component.extend({
     this._buildOptions(this._getBounds.bind(this));
     this.set('options.index', index);
 
+    console.log('ECLI-PHOTOSWIPE: click new PhotoSwipe');
+
     var pSwipe = new PhotoSwipe(
       this.get('pswpEl'),
       this.get('pswpTheme'),
@@ -122,6 +135,7 @@ export default Em.Component.extend({
         var index = this.get('items').indexOf(item);
         this.set('options.index', index);
       }
+      console.log('ECLI-PHOTOSWIPE: launchGallery new PhotoSwipe');
       var pSwipe = new PhotoSwipe(
         this.get('pswpEl'),
         this.get('pswpTheme'),

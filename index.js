@@ -20,6 +20,10 @@ module.exports = {
     }
   },
 
+  isDevelopingAddon() {
+    return true;
+  },
+
   treeForPublic: function() {
     var svgPath = path.join(this.app.bowerDirectory, 'photoswipe', 'dist', 'default-skin');
     var publicTree = new Funnel(this.treeGenerator(svgPath), {
