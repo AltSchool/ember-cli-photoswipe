@@ -62,7 +62,9 @@ export default Em.Component.extend({
     var component = this;
     this.get('gallery').listen('close', function() {
       run.next(function() {
-        component._initItemGallery();
+        if (!(component.get('isDestroying') || component.get('isDestroyed'))) {
+          component._initItemGallery();
+        }
       });
     });
   },
